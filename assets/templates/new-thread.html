@@ -1,0 +1,11 @@
+{{ template "head.html" }}
+
+<h1>new thread added</h1>
+
+<p> your new thread was added </p>
+
+<p>
+    <a href="/threads/{{ .thread.ID }}">{{ .thread.Subject }}</a>
+</p>
+
+{{ template "foot.html" }}

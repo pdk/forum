@@ -1,0 +1,39 @@
+{{ template "head.html" }}
+
+<p>
+    <a href="/topics">topics</a>
+    || <a href="/topics/{{ .topic.ID }}">{{ .topic.Name }}</a>
+</p>
+
+<h2>
+    {{ .thread.Subject }}
+</h2>
+
+{{ range .posts }}
+<p>
+    {{ .Body }}
+</p>
+
+<p>
+    -- {{ .UserName }} ({{ .PostedAt }})
+</p>
+
+{{ end }}
+
+<h2>new comment</h2>
+
+<form method="post" action="/add-post">
+
+    <input type="hidden" name="threadID" value="{{ .thread.ID }}">
+
+    <p>
+        Comments:<br>
+        <textarea name="body" cols="60" rows="10"></textarea>
+    </p>
+
+    <p>
+        <input type="submit">
+    </p>
+</form>
+
+{{ template "foot.html" }}

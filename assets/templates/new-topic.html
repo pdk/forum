@@ -1,0 +1,9 @@
+{{ template "head.html" }}
+
+<h1>new topic added</h1>
+
+<p> your new topic was added:
+    <a href="/topics/{{ .topic.ID }}">{{ .topic.Name }}</a>
+</p> 
+
+{{ template "foot.html" }}

@@ -1,0 +1,5 @@
+{
+    "Database": "forum.db",
+    "ListenAddress": "localhost:9753",
+    "AssetsDir": "./assets"
+}

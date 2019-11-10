@@ -1,0 +1,13 @@
+{{ template "head.html" }}
+
+<h1>new post added</h1>
+
+<p>
+    your comment was added to "{{ .thread.Subject }}"
+</p>
+
+<p>
+    <a href="/threads/{{ .thread.ID }}">go there</a>
+</p>
+
+{{ template "foot.html" }}

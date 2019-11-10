@@ -1,0 +1,20 @@
+{{ template "head.html" }}
+
+<h2>topics</h2>
+
+<ul>
+    {{ range .topics }}
+    <li>
+        <a href="/topics/{{ .ID }}">{{ .Name }}</a>
+    </li>
+    {{ end }}
+</ul>
+
+<h2>new topic</h2>
+
+<form method="post" action="/add-topic">
+    Add New Topic: <br>
+    <input type="text" name="name" size="50">
+</form>
+
+{{ template "foot.html" }}

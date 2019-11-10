@@ -1,0 +1,35 @@
+{{ template "head.html" }}
+
+<p>
+    <a href="/topics">topics</a>
+</p>
+
+<h2>threads for {{ .topic.Name }}</h2>
+
+<ul>
+    {{ range .threads }}
+    <li>
+        <a href="/threads/{{ .ID }}">{{ .Subject }}</a>
+    </li>
+    {{ end }}
+</ul>
+
+<h2>new thread</h2>
+
+<form method="post" action="/add-thread">
+    <input type="hidden" name="topicID" value="{{ .topic.ID }}">
+    <p>
+        Subject: <input type="text" name="subject" size="50">
+    </p>
+
+    <p>
+        Comments:<br>
+        <textarea name="body" cols="60" rows="10"></textarea>
+    </p>
+
+    <p>
+        <input type="submit">
+    </p>
+</form>
+
+{{ template "foot.html" }}
