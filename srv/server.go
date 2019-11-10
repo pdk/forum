@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 )
@@ -66,4 +67,16 @@ func (s Server) ListenAndServe(listenAddress string) {
 	log.Printf("listening at %s", listenAddress)
 	log.Fatalf("server failed: %w",
 		http.ListenAndServe(listenAddress, nil))
+}
+
+// WritePage executes a named template with the given data. This is meant to be
+// called by a page handler, and as the last thing done by page handlers,
+// there's nowhere to send an error, so we just log any errors here.
+func (s Server) WritePage(w io.Writer, name string, data interface{}) {
+
+	err := s.Template.ExecuteTemplate(w, name, data)
+
+	if err != nil {
+		log.Printf("error executing template %s: %w", name, err)
+	}
 }

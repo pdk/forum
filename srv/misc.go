@@ -3,7 +3,8 @@ package srv
 import (
 	"errors"
 	"fmt"
-	"log"
+	"html/template"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -44,12 +45,47 @@ func getPathID(url *url.URL) (int64, error) {
 	return id, nil
 }
 
-// ErrorPage returns the error page with a message for the user.
-func (s Server) ErrorPage(w http.ResponseWriter, message string) {
-	err := s.Template.ExecuteTemplate(w, "user-error.html", map[string]interface{}{
+// UserError returns the error page with a message for the user.
+func (s Server) UserError(w io.Writer, message string) {
+
+	s.WritePage(w, "user-error.html", map[string]interface{}{
 		"message": message,
 	})
-	if err != nil {
-		log.Printf("error executing template user-error.html: %w", err)
+}
+
+// MaybeUserError returns an error page if the condition is true.
+func (s Server) MaybeUserError(w io.Writer, condition bool, message string, args ...interface{}) bool {
+
+	if !condition {
+		return false
 	}
+
+	s.UserError(w, fmt.Sprintf(message, args...))
+
+	return true
+}
+
+// bodyAsHTML is a hacky solution to splitting text into paragraphs and maintaining line breaks.
+func bodyAsHTML(body string) template.HTML {
+
+	body = strings.ReplaceAll(body, "\r\n", "\n")
+	body = strings.ReplaceAll(body, "\r", "\n")
+	paragraphs := strings.Split(body, "\n\n")
+
+	sb := strings.Builder{}
+
+	for _, para := range paragraphs {
+		para = strings.TrimSpace(para)
+		if para == "" {
+			continue
+		}
+
+		sb.WriteString("<p>\n")
+		para = template.HTMLEscapeString(para)
+		para = strings.ReplaceAll(para, "\n", "<br>\n")
+		sb.WriteString(para)
+		sb.WriteString("\n</p>\n")
+	}
+
+	return template.HTML(sb.String())
 }
